@@ -1,0 +1,44 @@
+Pricing and Service Plans
+
+Effective: March 2024
+
+1. Basic Plan - $29/month
+- Includes: 5 user accounts
+- Storage: 50GB
+- Support: Email support (48-hour response)
+- Features: Basic analytics, API access, monthly reports
+
+2. Professional Plan - $79/month
+- Includes: 15 user accounts
+- Storage: 200GB
+- Support: Priority email support (24-hour response)
+- Features: Advanced analytics, custom reports, API webhooks
+- Free: 1-hour monthly consultation
+
+3. Enterprise Plan - $199/month
+- Includes: Unlimited user accounts
+- Storage: 1TB
+- Support: 24/7 phone and email support
+- Features: Custom development, dedicated account manager
+- Free: 4-hour monthly consultation, custom integrations
+
+4. Add-on Services
+- Additional storage: $5/50GB per month
+- Extra user accounts: $3/user per month
+- Priority support: $49/month (2-hour response guarantee)
+- Custom development: $150/hour
+
+5. Discounts
+- Annual billing: 15% discount
+- Non-profit organizations: 25% discount
+- Educational institutions: 20% discount
+- Startup program: 30% discount for first 6 months
+
+6. Payment Methods
+We accept:
+- Credit cards (Visa, MasterCard, American Express)
+- PayPal
+- Bank transfers
+- Annual invoices for enterprise clients
+
+Free Trial: 14-day free trial available for all plans. No credit card required.

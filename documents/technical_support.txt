@@ -1,0 +1,45 @@
+Technical Support Guide
+
+Support Availability:
+- Monday to Friday: 9:00 AM - 6:00 PM EST
+- Emergency support: 24/7 for critical system outages
+- Response time: Within 2 business hours for priority issues
+
+Common Solutions:
+
+1. Password Reset
+If you've forgotten your password:
+- Go to our login page
+- Click "Forgot Password"
+- Enter your registered email address
+- Check your email for reset instructions
+- The reset link expires after 2 hours
+
+2. System Requirements
+Minimum requirements for our software:
+- Operating System: Windows 10, macOS 10.14+, or Linux Ubuntu 18.04+
+- RAM: 8GB minimum, 16GB recommended
+- Storage: 10GB available space
+- Internet: Broadband connection (10Mbps+)
+
+3. Browser Compatibility
+Supported browsers:
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+4. Common Error Codes
+- Error 404: Page not found - refresh or clear cache
+- Error 500: Server error - try again in 5 minutes
+- Error 503: Service unavailable - maintenance in progress
+
+5. Contacting Support
+When contacting support, please provide:
+- Your account email
+- Description of the issue
+- Error messages (screenshot if possible)
+- Steps to reproduce the issue
+
+Emergency Contact: 
+For critical system outages, call +1-555-EMERGENCY (363744)
