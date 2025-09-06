@@ -1,19 +1,25 @@
 from langchain.tools import tool
-from database_utils import database_query_tool as db_query, create_support_ticket, get_ticket_by_id, query_ticket_answer
+from database_utils import (
+    database_query_tool as db_query,
+    create_support_ticket,
+    get_ticket_by_id,
+    query_ticket_answer,
+)
 from rag_system import rag_search
+
 
 # Database Query Tool
 @tool
 def query_database_tool(question: str) -> str:
     """
     Search the database for information about team members, FAQs, past tickets, or other structured data.
-    
+
     Returns the answer if found. If no information is available, returns a special marker
     '___NO_INFO_FOUND___' so the main program can prompt the user to create a support ticket.
-    
+
     Args:
         question (str): The user's query to search in the database.
-    
+
     Returns:
         str: The response from the database or '___NO_INFO_FOUND___' if no data is found.
     """
@@ -51,13 +57,13 @@ def query_rag_tool(question: str) -> str:
 @tool
 def create_support_ticket_tool(user_question: str, user_name: str = "anonymous") -> str:
     """
-    Ask the user if they want a support ticket created. 
+    Ask the user if they want a support ticket created.
     Store the actual user question as the issue.
     """
     # Ask user for confirmation
-    confirm = input("I don't have an answer for this. Should I create a support ticket? (yes/no): ").strip().lower()
-    if confirm not in ["yes", "y"]:
-        return "Okay, no ticket was created."
+    # confirm = input("I don't have an answer for this. Should I create a support ticket? (yes/no): ").strip().lower()
+    # if confirm not in ["yes", "y"]:
+    # return "Okay, no ticket was created."
 
     ticket_id = create_support_ticket(user_name=user_name, issue=user_question)
     if ticket_id:
@@ -75,7 +81,7 @@ def check_ticket_status_tool(ticket_id: str) -> str:
     ticket = get_ticket_by_id(ticket_id)
     if not ticket:
         return f"Ticket {ticket_id} not found."
-    
+
     status = ticket["status"]
     issue = ticket["issue"]
     response = ticket.get("response")
@@ -89,7 +95,7 @@ def check_ticket_status_tool(ticket_id: str) -> str:
 # List of all available tools
 SUPPORT_AGENT_TOOLS = [
     query_database_tool,
-    query_rag_tool, 
+    query_rag_tool,
     create_support_ticket_tool,
-    check_ticket_status_tool
+    check_ticket_status_tool,
 ]

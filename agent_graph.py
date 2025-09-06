@@ -18,16 +18,20 @@ load_dotenv()
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY", "")
+print(f"[agent_graph.py] GROQ_API_KEY loaded: {os.getenv('GROQ_API_KEY') is not None}")
 
 
 # Define Graph State
 class AgentState(TypedDict):
     chat_history: List[BaseMessage]
-    agent_outcome: List[tuple]  
+    agent_outcome: List[tuple]
 
 
 # Initialize LLM
-llm = init_chat_model("groq:llama3-70b-8192", temperature=0)
+llm = init_chat_model(
+    model="llama-3.3-70b-versatile", temperature=0, model_provider="groq"
+)
+
 
 # Agent system prompt
 SYSTEM_PROMPT = """You are an autonomous customer support agent. Analyze each query and choose the appropriate tools.
@@ -87,9 +91,25 @@ def run_agent(state: AgentState):
         # Agent invoked tools or returned a dictionary output
         output_content = result.get("output", "")
         intermediate_steps = result.get("intermediate_steps", [])
+
+        # Extract the actual tool output if available in intermediate_steps
+        tool_output = ""
+        for step in intermediate_steps:
+            if (
+                isinstance(step, tuple)
+                and len(step) == 2
+                and isinstance(step[1], FunctionMessage)
+            ):
+                tool_output = step[1].content
+                break
+
+        # Prefer tool output if available, otherwise use general output
+        final_response_content = tool_output if tool_output else output_content
+
         return {
             "agent_outcome": intermediate_steps,
-            "chat_history": state["chat_history"] + [AIMessage(content=output_content)],
+            "chat_history": state["chat_history"]
+            + [AIMessage(content=final_response_content)],
         }
     else:
         # Fallback for unexpected result types
@@ -121,7 +141,7 @@ def should_continue(state: AgentState) -> str:
 workflow = StateGraph(AgentState)
 
 workflow.add_node("agent", run_agent)
-workflow.add_node("tools", tool_node)  # Use the ToolNode here
+workflow.add_node("tools", tool_node)
 
 workflow.set_entry_point("agent")
 
@@ -138,14 +158,16 @@ def process_graph_with_agent(
     user_input: str, conversation_history: List[BaseMessage] = None
 ):
     initial_state = {
-        "chat_history": conversation_history if conversation_history else [],
+        "chat_history": (
+            conversation_history if conversation_history is not None else []
+        ),
         "agent_outcome": [],  # Initialize agent_outcome as an empty list
     }
-    initial_state["chat_history"].append(HumanMessage(content=user_input))
+    # initial_state["chat_history"].append(HumanMessage(content=user_input)) # This is handled by api.py already
 
     for s in app.stream(initial_state):
         if "__end__" not in s:
             pass  # We will handle printing in main.py
 
     final_state = app.invoke(initial_state)
-    return final_state["chat_history"][-1]
+    return final_state["chat_history"]

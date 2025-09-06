@@ -7,7 +7,7 @@ from langchain_core.messages import (
     BaseMessage,
     HumanMessage,
     AIMessage,
-)  # Import BaseMessage and its subclasses
+)
 
 # Load environment variables
 load_dotenv()
@@ -120,13 +120,21 @@ def main():
             if is_conversational(user_input) or is_goodbye(user_input):
                 response = handle_conversational_query(user_input)
                 print(f"Assistant: {response}\n")
+                conversation_state.add_message("user", user_input)
+                conversation_state.add_message("assistant", response)
                 continue
 
             # Use agent for everything else
             print("Thinking...", end="", flush=True)
-            response_message = process_graph_with_agent(
+            conversation_state.add_message(
+                "user", user_input
+            )  # Add user input to history before processing
+            response_history = process_graph_with_agent(
                 user_input, conversation_state.get_history()
             )
+            response_message = response_history[
+                -1
+            ]  # Get the latest message from the updated history
             response_content = (
                 response_message.content
                 if hasattr(response_message, "content")
@@ -134,9 +142,10 @@ def main():
             )
             print(f"\rAssistant: {response_content}\n")
 
-            # Update conversation history
-            conversation_state.add_message("user", user_input)
-            conversation_state.add_message("assistant", response_content)
+            # Update conversation history with the full response from the agent
+            # The process_graph_with_agent now returns the last message of the updated history
+            # We need to update the whole history in conversation_state to reflect the full conversation
+            conversation_state.history = response_history
 
             # Handle unanswered queries
 
